@@ -33,7 +33,7 @@ class CalcSuccessPage extends StatelessWidget {
                               height: 30,
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left:28.0),
+                              padding: const EdgeInsets.only(left: 28.0),
                               child: Image.asset(box2),
                             ),
                             SizedBox(
@@ -42,27 +42,9 @@ class CalcSuccessPage extends StatelessWidget {
                             Text(
                               'Total Estimated Amount',
                               style: context.theme.textTheme.titleSmall
-                                  ?.copyWith(fontSize: 26,wordSpacing: -4),
+                                  ?.copyWith(fontSize: 26, wordSpacing: -4),
                             ),
-
-                            Text.rich(
-                              TextSpan(
-                                  children: [
-                                    TextSpan(text: "\$1458"),
-                                    TextSpan(
-                                        text: " USD",
-                                        style: context
-                                            .theme.textTheme.titleSmall
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.w400,
-                                                color: appColor.success)),
-                                  ],
-                                  style: context.theme.textTheme.headlineMedium
-                                      ?.copyWith(
-                                          fontWeight: FontWeight.w400,
-                                          color: appColor.success)),
-                              style: TextStyle(color: appColor.success),
-                            ),
+                            CountDownCurrency(),
                             Text(
                               'The amount is estimated this vary if you change your location or weight',
                               textAlign: TextAlign.center,
@@ -85,7 +67,7 @@ class CalcSuccessPage extends StatelessWidget {
                             onPressed: () {
                               var navigatorState = Navigator.of(context);
                               navigatorState.pop();
-                              if(navigatorState.canPop()){
+                              if (navigatorState.canPop()) {
                                 navigatorState.pop();
                               }
                             },
@@ -105,5 +87,76 @@ class CalcSuccessPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CountDownCurrency extends StatefulWidget {
+  const CountDownCurrency({
+    super.key,
+  });
+
+  @override
+  State<CountDownCurrency> createState() => _CountDownCurrencyState();
+}
+
+class _CountDownCurrencyState extends State<CountDownCurrency>
+    with SingleTickerProviderStateMixin {
+  AnimationController? _animationController;
+  Animation<double>? _animation;
+
+  int _startValue = 0;
+  int _endValue = 1432;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+
+    if (_animationController != null) {
+      _animation = Tween<double>(
+        begin: _startValue.toDouble(),
+        end: _endValue.toDouble(),
+      ).animate(CurvedAnimation(
+        parent: _animationController!,
+        curve: Curves.easeInOut,
+      ));
+    }
+
+    _animationController?.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _animationController == null
+        ? SizedBox()
+        : AnimatedBuilder(
+            animation: _animationController!,
+            builder: (BuildContext context, Widget? child) {
+              return Text.rich(
+                TextSpan(
+                    children: [
+                      TextSpan(text: "\$${ _animation?.value.toInt().toString()}"),
+                      TextSpan(
+                          text: " USD",
+                          style: context.theme.textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.w400,
+                              color: appColor.success)),
+                    ],
+                    style: context.theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.w400, color: appColor.success)),
+                style: TextStyle(color: appColor.success),
+              );
+            },
+          );
   }
 }
