@@ -71,15 +71,15 @@ class CalculatorPage extends StatelessWidget {
                         child: Column(
                           children: [
                             TextFormField(
-                              decoration: buildInputDecoration(sendBox),
+                              decoration: buildInputDecoration(sendBox,hintText: "Sender Location"),
                             ),
                             const SizedBox(height: 12),
                             TextFormField(
-                              decoration: buildInputDecoration(receiveBox),
+                              decoration: buildInputDecoration(receiveBox,hintText: "Receiver Location"),
                             ),
                             const SizedBox(height: 12),
                             TextFormField(
-                              decoration: buildInputDecoration(scale),
+                              decoration: buildInputDecoration(scale,hintText: "Approx Weight"),
                             ),
                             // const SizedBox(height: 12),
                           ],
@@ -179,15 +179,18 @@ class CalculatorPage extends StatelessWidget {
     );
   }
 
-  InputDecoration buildInputDecoration(String prefixImage, {Color? fillColor}) {
+  InputDecoration buildInputDecoration(String prefixImage, {Color? fillColor,String? hintText}) {
     return InputDecoration(
       fillColor: fillColor,
-      prefixIconConstraints: const BoxConstraints(maxHeight: 26, maxWidth: 63),
+      hintText: hintText,
+      hintStyle: appTheme.light.textTheme.titleMedium
+          ?.copyWith(color: appColor.gray),
+      prefixIconConstraints:  BoxConstraints(maxHeight: prefixImage==shipItem?30.0:20, maxWidth: 63),
       // constraints: const BoxConstraints(maxHeight: 43),
       prefixIcon: Row(
         children: [
           Padding(
-              padding: const EdgeInsets.only(left: 18.0, top: 2),
+              padding:  EdgeInsets.only(left: 18.0, top: 2),
               child: Image.asset(prefixImage)),
           SizedBox(width: 8),
           Container(
