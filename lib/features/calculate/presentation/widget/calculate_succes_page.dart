@@ -104,8 +104,8 @@ class _CountDownCurrencyState extends State<CountDownCurrency>
   AnimationController? _animationController;
   Animation<double>? _animation;
 
-  int _startValue = 0;
-  int _endValue = 1432;
+  final int _startValue = 0;
+  final int _endValue = 1432;
 
   @override
   void initState() {
